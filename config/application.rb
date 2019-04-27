@@ -34,6 +34,6 @@ module FoodappPos
 
     config.user_email = 'aaa@aaa.com'
     config.user_password = '123123123'
-    config.iiko_default_category = 'Без категории'
+    config.default_category_name = 'Без категории'
   end
 end

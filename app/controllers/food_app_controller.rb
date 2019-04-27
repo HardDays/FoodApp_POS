@@ -6,9 +6,10 @@ class FoodAppController < ApplicationController
     param :form, :email, :string, :required, 'Email'
     param :form, :password, :string, :required, 'Password'
     param :form, :restaurant_id, :string, :required, 'restaurant id'
-    param :form, :iiko_url, :string, :optional, 'iiko url'
-    param :form, :iiko_login, :string, :optional, 'iiko login'
-    param :form, :iiko_password, :string, :optional, 'iiko pass'
+    param_list :form, :pos_name, :string, :required, 'Pos system name', [:iiko, ]
+    param :form, :pos_url, :string, :optional, 'Pos system url'
+    param :form, :pos_login, :string, :optional, 'Pos system login'
+    param :form, :pos_password, :string, :optional, 'Pos system pass'
     param :form, :sync_data, :boolean, :optional, 'syncronization required'
     response :ok
     response :unauthorized
@@ -35,11 +36,11 @@ class FoodAppController < ApplicationController
         })
     end
 
-    iiko_pass_hash = Digest::SHA1.hexdigest(params[:iiko_password])
-    restaurant_connected = FoodAppSync.connect_restaurant_to_iiko(
-      @connection, params[:restaurant_id], params[:iiko_url], params[:iiko_login], iiko_pass_hash)
+    @restaurant = PosHelper::connect_restaurant_to_pos(
+      @connection, params[:restaurant_id],
+      params[:pos_name], params[:pos_url], params[:pos_login], params[:pos_password])
 
-    unless restaurant_connected
+    unless @restaurant
       render json: {errors: :RESTAURANT_NOT_FOUND}, status: :forbidden and return
     end
 
@@ -51,6 +52,6 @@ class FoodAppController < ApplicationController
   end
 
   def sync_data
-    FoodAppSync.sync_restaurant_menu(params[:restaurant_id])
+    PosHelper.sync_restaurant_menu(@restaurant)
   end
 end

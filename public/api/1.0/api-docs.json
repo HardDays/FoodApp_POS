@@ -8,8 +8,8 @@
       "description": "Food App"
     },
     {
-      "path": "/api/1.0/iiko.{format}",
-      "description": "IIKO"
+      "path": "/api/1.0/pos.{format}",
+      "description": "POS"
     }
   ],
   "authorizations": null,

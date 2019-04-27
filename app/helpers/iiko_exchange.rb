@@ -1,27 +1,44 @@
 class IIKOExchange
   include HTTParty
+  base_uri 'https://iiko.biz:9900/api/0'
 
   def initialize(restaurant)
-    self.class.base_uri restaurant.iiko_url
-
     response = self.class.get(
-      "/resto/api/auth?login=#{restaurant.iiko_login}&pass=#{restaurant.iiko_password}",
+      "/auth/access_token?user_id=#{restaurant.pos_login}&user_secret=#{restaurant.pos_password}",
       headers: {
         'Content-Type' => 'application/json'
       }
     )
 
     if response.code == 200
-      @token = response
+      @token = response.body.gsub('"', '')
     end
   end
 
-  def menu_items
-    menu_items = self.class.get(
-      "/resto/api/v2/entities/products/list?includeDeleted=false&types=DISH",
+  def set_restaurant_pos_info(restaurant)
+    restaurants = self.class.get(
+      "/organization/list?access_token=#{@token}",
       headers: {
-        'Content-Type' => 'application/json',
-        'Cookie' => "key=#{@token}"
+        'Content-Type' => 'application/json'
+      }
+    ).body
+
+    if restaurants == ""
+      return false
+    end
+
+    restaurants = JSON.parse restaurants
+    restaurant.pos_id = restaurants[0]["id"]
+    restaurant.currency = restaurants[0]["currencyIsoName"]
+    restaurant.save
+    true
+  end
+
+  def get_menu(restaurant_guid)
+    menu_items = self.class.get(
+      "/nomenclature/#{restaurant_guid}?access_token=#{@token}",
+      headers: {
+        'Content-Type' => 'application/json'
       }
     ).body
 
@@ -29,38 +46,57 @@ class IIKOExchange
       menu_items = "{}"
     end
 
+    menu_items = JSON.parse menu_items
+    menu_items["products"].each do |menu_item|
+      menu_item["pos_category_id"] = menu_item["productCategoryId"]
+      menu_item["cooking_time"] = nil
+      menu_item["kcal"] = menu_item["energyFullAmount"]
+    end
+
     menu_items
   end
 
-  def menu_categories
-    menu_categories = self.class.get(
-      "/resto/api/v2/entities/products/category/list?includeDeleted=false",
-      headers: {
-        'Content-Type' => 'application/json',
-        'Cookie' => "key=#{@token}"
-      }
-    ).body
-
-    if menu_categories == ""
-      menu_categories = "{}"
+  def send_order(restaurant_guid, customer_info, items, payment_type)
+    items_data = []
+    items.each do |item|
+      items_data.append(
+        {
+          id: item["id"],
+          name: item["name"],
+          amount: item["amount"],
+          code: item["code"],
+          sum: item["sum"]
+        })
     end
 
-    menu_categories
-  end
-
-  def get_menu_category
-    menu_categories = self.class.get(
-      "/resto/api/v2/entities/products/category/list?includeDeleted=false",
+    order = self.class.post(
+      "/orders/add?&access_token=#{@token}",
+      body: {
+        organization: restaurant_guid,
+        customer: {
+          name: customer_info["name"],
+          phone: customer_info["phone"]
+        },
+        order: {
+          date: DateTime.now,
+          phone: customer_info["phone"],
+          isSelfService: true,
+          items: items_data
+        },
+        address: {},
+        paymentItems: [
+          {
+            sum: 0,
+            paymentType: [payment_type],
+            isProcessedExternally: false
+          }
+        ]
+      }.to_json,
       headers: {
-        'Content-Type' => 'application/json',
-        'Cookie' => "key=#{@token}"
+        'Content-Type' => 'application/json'
       }
-    ).body
+    )
 
-    if menu_categories == ""
-      menu_categories = "{}"
-    end
-
-    menu_categories
+    order
   end
 end

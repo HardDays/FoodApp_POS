@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   post 'sign_in' => 'food_app#sign_in'
 
-  get 'iiko_menu' => 'iiko#get_menu'
-  post 'upload_iiko' => 'iiko#sync_menu'
+  get 'get_menu' => 'pos#get_menu'
+  post 'sync_menu' => 'pos#sync_menu'
+  post 'send_order' => 'pos#send_order'
 end

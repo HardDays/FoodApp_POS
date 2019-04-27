@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_03_152001) do
+ActiveRecord::Schema.define(version: 2019_04_27_184614) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -22,13 +22,14 @@ ActiveRecord::Schema.define(version: 2019_04_03_152001) do
     t.uuid "restaurant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "iiko_id"
+    t.uuid "pos_id"
+    t.uuid "foodapp_id"
   end
 
   create_table "menu_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "description"
-    t.uuid "menu_category_id"
+    t.uuid "pos_menu_category_id"
     t.integer "price"
     t.integer "cooking_time"
     t.integer "kcal"
@@ -36,7 +37,10 @@ ActiveRecord::Schema.define(version: 2019_04_03_152001) do
     t.string "currency"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "iiko_id"
+    t.uuid "pos_id"
+    t.uuid "foodapp_id"
+    t.uuid "foodapp_menu_category_id"
+    t.string "code"
   end
 
   create_table "restaurants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -45,9 +49,13 @@ ActiveRecord::Schema.define(version: 2019_04_03_152001) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "user_id"
-    t.string "iiko_url"
-    t.string "iiko_login"
-    t.string "iiko_password"
+    t.string "pos_url"
+    t.string "pos_login"
+    t.string "pos_password"
+    t.integer "pos_name"
+    t.uuid "pos_id"
+    t.uuid "foodapp_id"
+    t.string "currency"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

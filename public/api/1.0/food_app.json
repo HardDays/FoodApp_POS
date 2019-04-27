@@ -33,23 +33,36 @@
             },
             {
               "paramType": "form",
-              "name": "iiko_url",
+              "name": "pos_name",
               "type": "string",
-              "description": "iiko url",
+              "description": "Pos system name",
+              "required": true,
+              "allowableValues": {
+                "valueType": "LIST",
+                "values": [
+                  "iiko"
+                ]
+              }
+            },
+            {
+              "paramType": "form",
+              "name": "pos_url",
+              "type": "string",
+              "description": "Pos system url",
               "required": false
             },
             {
               "paramType": "form",
-              "name": "iiko_login",
+              "name": "pos_login",
               "type": "string",
-              "description": "iiko login",
+              "description": "Pos system login",
               "required": false
             },
             {
               "paramType": "form",
-              "name": "iiko_password",
+              "name": "pos_password",
               "type": "string",
-              "description": "iiko pass",
+              "description": "Pos system pass",
               "required": false
             },
             {

@@ -54,7 +54,7 @@ class FoodAppExchange
       restaurants = "{}"
     end
 
-    restaurants
+    JSON.parse restaurants
   end
 
   def get_menu_categories(restaurant_id)
@@ -70,7 +70,7 @@ class FoodAppExchange
       menu_categories = "{}"
     end
 
-    menu_categories
+    JSON.parse menu_categories
   end
 
   def set_menu_category(json, restaurant_id)
@@ -87,7 +87,7 @@ class FoodAppExchange
       menu_category = "{}"
     end
 
-    menu_category
+    JSON.parse menu_category
   end
 
   def update_menu_category(json, restaurant_id, menu_category_id)
@@ -104,7 +104,7 @@ class FoodAppExchange
       menu_category = "{}"
     end
 
-    menu_category
+    JSON.parse menu_category
   end
 
   def get_menu_items(restaurant_id, menu_category_id)
@@ -120,7 +120,7 @@ class FoodAppExchange
       menu_items = "{}"
     end
 
-    menu_items
+    JSON.parse menu_items
   end
 
   def set_menu_item(json, restaurant_id, menu_category_id)
@@ -137,7 +137,7 @@ class FoodAppExchange
       menu_item = "{}"
     end
 
-    menu_item
+    JSON.parse menu_item
   end
 
   def update_menu_item(json, restaurant_id, menu_category_id, menu_item_id)
@@ -154,6 +154,6 @@ class FoodAppExchange
       menu_item = "{}"
     end
 
-    menu_item
+    JSON.parse menu_item
   end
 end
