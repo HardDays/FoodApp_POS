@@ -9,4 +9,5 @@ Rails.application.routes.draw do
   get 'get_menu' => 'pos#get_menu'
   post 'sync_menu' => 'pos#sync_menu'
   post 'send_order' => 'pos#send_order'
+  post 'check_order' => 'pos#check_order'
 end

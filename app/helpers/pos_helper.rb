@@ -151,7 +151,6 @@ class PosHelper
           local_restaurant.address = foodapp_restaurant["address"]
           local_restaurant.user_id = connection.get_user_id
           local_restaurant.pos_name = Restaurant.pos_names[pos_name]
-          local_restaurant.pos_url = pos_url
           local_restaurant.pos_login = pos_login
           local_restaurant.pos_password = pos_password
           local_restaurant.save
@@ -182,17 +181,12 @@ class PosHelper
       item["code"] = local_menu_item.code
     end
 
-    payment_type = {
-      id: "09322f46-578a-d210-add7-eec222a08871",
-      code: "CASH",
-      name: "Наличные",
-      comment: nil,
-      combinable: true,
-      externalRevision: 0,
-      applicableMarketingCampaigns: nil,
-      deleted: false
-    }
-
     @connection.send_order(restaurant.pos_id, customer_info, items, payment_type)
+  end
+
+  def self.check_order(restaurant, order)
+    self.set_connection(restaurant)
+
+    @connection.check_order(restaurant, order)
   end
 end

@@ -2,6 +2,25 @@ class IIKOExchange
   include HTTParty
   base_uri 'https://iiko.biz:9900/api/0'
 
+  @@order_statuses = {
+    "Готовится": :in_progress,
+    "In progress": :in_progress,
+    "Не подтверждена": :in_progress,
+    "Not confirmed": :in_progress,
+    "Ждет отправки": :ready,
+    "Awaiting delivery": :ready,
+    "В пути": :ready,
+    "On the way": :ready,
+    "Закрыта": :ready,
+    "Closed": :ready,
+    "Доставлена": :ready,
+    "Delivered": :ready,
+    "Готово": :ready,
+    "Ready": :ready,
+    "Отменена": :canceled,
+    "Cancelled": :canceled,
+  }
+
   def initialize(restaurant)
     response = self.class.get(
       "/auth/access_token?user_id=#{restaurant.pos_login}&user_secret=#{restaurant.pos_password}",
@@ -57,6 +76,17 @@ class IIKOExchange
   end
 
   def send_order(restaurant_guid, customer_info, items, payment_type)
+    payment_type = {
+      id: "09322f46-578a-d210-add7-eec222a08871",
+      code: "CASH",
+      name: "Наличные",
+      comment: nil,
+      combinable: true,
+      externalRevision: 0,
+      applicableMarketingCampaigns: nil,
+      deleted: false
+    }
+
     items_data = []
     items.each do |item|
       items_data.append(
@@ -95,8 +125,34 @@ class IIKOExchange
       headers: {
         'Content-Type' => 'application/json'
       }
-    )
+    ).body
 
-    order
+    if order == ""
+      order = "{}"
+    end
+
+    JSON.parse order
+  end
+
+  def check_order(restaurant, order)
+    order_info = self.class.get(
+      "/orders/info?access_token=#{@token}&organization=#{restaurant.pos_id}&order=#{order.pos_order_id}",
+      headers: {
+        'Content-Type' => 'application/json'
+      }
+    ).body
+
+    result = {}
+    if order_info
+      order_info = JSON.parse order_info
+
+      if order_info["status"].to_sym.in? @@order_statuses.keys
+        result = {
+          order_status: @@order_statuses[order_info["status"].to_sym]
+        }
+      end
+    end
+
+    result.to_json
   end
 end

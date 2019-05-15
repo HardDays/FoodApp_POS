@@ -156,4 +156,21 @@ class FoodAppExchange
 
     JSON.parse menu_item
   end
+
+  def update_order_status(json, restaurant_id, order_id)
+     order = self.class.put(
+      "/restaurants/#{restaurant_id}/orders/#{order_id}",
+      body: json,
+      headers: {
+        'Content-Type' => 'application/json',
+        'Authorization' => @user["token"]
+      }
+    ).body
+
+    if order == ""
+      order = "{}"
+    end
+
+    JSON.parse order
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_27_184614) do
+ActiveRecord::Schema.define(version: 2019_05_14_194858) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -41,6 +41,15 @@ ActiveRecord::Schema.define(version: 2019_04_27_184614) do
     t.uuid "foodapp_id"
     t.uuid "foodapp_menu_category_id"
     t.string "code"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.uuid "restaurant_id"
+    t.uuid "pos_order_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "pos_order_number"
+    t.uuid "foodapp_order_id"
   end
 
   create_table "restaurants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

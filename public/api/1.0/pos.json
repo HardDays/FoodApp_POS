@@ -91,6 +91,13 @@
             },
             {
               "paramType": "form",
+              "name": "order_id",
+              "type": "string",
+              "description": "FoodApp order id",
+              "required": true
+            },
+            {
+              "paramType": "form",
               "name": "customer_info",
               "type": "string",
               "description": "Customer info {name: abc, phone: 79512341234}",
@@ -129,6 +136,49 @@
             }
           ],
           "nickname": "Pos#send_order",
+          "method": "post"
+        }
+      ]
+    },
+    {
+      "path": "/check_order.json",
+      "operations": [
+        {
+          "summary": "Check order status",
+          "parameters": [
+            {
+              "paramType": "form",
+              "name": "restaurant_id",
+              "type": "string",
+              "description": "FoodApp restaurant id",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "order_id",
+              "type": "string",
+              "description": "POS order uuid",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Ok"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "Forbidden"
+            },
+            {
+              "code": 422,
+              "responseModel": null,
+              "message": "Unprocessable Entity"
+            }
+          ],
+          "nickname": "Pos#check_order",
           "method": "post"
         }
       ]
