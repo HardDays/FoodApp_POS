@@ -17,8 +17,8 @@ class IIKOExchange
     "Delivered": :ready,
     "Готово": :ready,
     "Ready": :ready,
-    "Отменена": :canceled,
-    "Cancelled": :canceled,
+    "Отменена": :canceled_resto,
+    "Cancelled": :canceled_resto,
   }
 
   def initialize(restaurant)
