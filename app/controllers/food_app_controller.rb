@@ -81,9 +81,9 @@ class FoodAppController < ApplicationController
 
   def get_restaurant
     @connection = FoodAppExchange.new("aaa@aaa.com", nil)
-    @connection.get_restaurant("1ff63949-2b03-4c15-917f-d74f0fc786b0")
+    restaurant = @connection.get_restaurant("1ff63949-2b03-4c15-917f-d74f0fc786b0")
 
-    render status: :ok
+    render json: restaurant, status: :ok
   end
 
   swagger_api :create_test_order do
