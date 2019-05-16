@@ -57,6 +57,22 @@ class FoodAppExchange
     JSON.parse restaurants
   end
 
+  def get_restaurant(restaurant_id)
+    restaurant = self.class.get(
+        "/restaurants/#{restaurant_id}",
+        headers: {
+            'Content-Type' => 'application/json',
+            'Authorization' => @user["token"]
+        }
+    ).body
+
+    if restaurant == ""
+      restaurant = "{}"
+    end
+
+    JSON.parse restaurant
+  end
+
   def get_menu_categories(restaurant_id)
     menu_categories = self.class.get(
       "/restaurants/#{restaurant_id}/menu_categories",
@@ -157,6 +173,72 @@ class FoodAppExchange
     JSON.parse menu_item
   end
 
+  def clear_menu(restaurant_id)
+    restaurant = self.class.get(
+      "/restaurants/#{restaurant_id}",
+      headers: {
+        'Content-Type' => 'application/json',
+        'Authorization' => @user["token"]
+      }
+    ).body
+
+    if restaurant == ""
+      restaurant = "{}"
+    end
+
+    restaurant = JSON.parse restaurant
+
+    restaurant["menu_categories"].each do |menu_category|
+      menu_category["menu_items"].each do |menu_item|
+        self.class.delete(
+          "/restaurants/#{restaurant_id}/menu_categories/#{menu_category["id"]}/menu_items/#{menu_item["id"]}",
+          headers: {
+            'Content-Type' => 'application/json',
+            'Authorization' => @user["token"]
+          }
+        )
+      end
+
+      self.class.delete(
+        "/restaurants/#{restaurant_id}/menu_categories/#{menu_category["id"]}",
+        headers: {
+          'Content-Type' => 'application/json',
+          'Authorization' => @user["token"]
+        }
+      )
+    end
+  end
+
+  def create_test_order(date, item_id)
+    item = MenuItem.find_by(pos_id: "bb0f7fae-e90b-4629-0169-9ae9ca3602fd")
+
+    order = self.class.post(
+      "/users/me/orders",
+      body: {
+        "date": date,
+        "people_count": 1,
+        "carry_option": "with_me",
+        "order_menu_items": [
+          {
+            "menu_item_id": item_id,
+            "count": 1
+          }
+        ]
+      }.to_json,
+      headers: {
+        'Content-Type' => 'application/json',
+        'Authorization' => @user["token"]
+      }
+    )
+    order = order.body
+
+    if order == ""
+      order = "{}"
+    end
+
+    JSON.parse order
+  end
+
   def update_order_status(json, restaurant_id, order_id)
      order = self.class.put(
       "/restaurants/#{restaurant_id}/orders/#{order_id}",
@@ -172,5 +254,21 @@ class FoodAppExchange
     end
 
     JSON.parse order
+  end
+
+  def get_orders
+    orders = self.class.get(
+      "/users/me/orders/current",
+      headers: {
+        'Content-Type' => 'application/json',
+        'Authorization' => @user["token"]
+      }
+    ).body
+
+    if orders == ""
+      orders = "{}"
+    end
+
+    JSON.parse orders
   end
 end

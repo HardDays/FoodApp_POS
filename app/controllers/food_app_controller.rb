@@ -11,6 +11,7 @@ class FoodAppController < ApplicationController
     param :form, :pos_login, :string, :optional, 'Pos system login'
     param :form, :pos_password, :string, :optional, 'Pos system pass'
     param :form, :sync_data, :boolean, :optional, 'syncronization required'
+    param :form, :clear_menu, :boolean, :optional, 'clear menu before sync'
     response :ok
     response :unauthorized
   end
@@ -44,6 +45,10 @@ class FoodAppController < ApplicationController
       render json: {errors: :RESTAURANT_NOT_FOUND}, status: :forbidden and return
     end
 
+    if params[:clear_menu]
+      @connection.clear_menu(@restaurant.foodapp_id)
+    end
+
     if params[:sync_data]
       sync_data
     end
@@ -53,5 +58,59 @@ class FoodAppController < ApplicationController
 
   def sync_data
     PosHelper.sync_restaurant_menu(@restaurant)
+  end
+
+  swagger_api :clear_menu do
+    summary 'foodapp menu clear'
+    response :ok
+    response :unauthorized
+  end
+
+  def clear_menu
+    @connection = FoodAppExchange.new("aaa@aaa.com", nil)
+    @connection.clear_menu("1ff63949-2b03-4c15-917f-d74f0fc786b0")
+
+    render status: :ok
+  end
+
+  swagger_api :get_restaurant do
+    summary 'foodapp restaurant'
+    response :ok
+    response :unauthorized
+  end
+
+  def get_restaurant
+    @connection = FoodAppExchange.new("aaa@aaa.com", nil)
+    @connection.get_restaurant("1ff63949-2b03-4c15-917f-d74f0fc786b0")
+
+    render status: :ok
+  end
+
+  swagger_api :create_test_order do
+    summary 'Create test order in foodapp'
+    param :form, :date, :string, :required
+    param :form, :item_id, :string, :required
+    response :ok
+    response :unauthorized
+  end
+
+  def create_test_order
+    @connection = FoodAppExchange.new("aaa@aaa.com", nil)
+    order = @connection.create_test_order(params[:date], params[:item_id])
+
+    render json: order, status: :ok
+  end
+
+  swagger_api :get_orders do
+    summary 'foodapp menu clear'
+    response :ok
+    response :unauthorized
+  end
+
+  def get_orders
+    @connection = FoodAppExchange.new("aaa@aaa.com", nil)
+    orders = @connection.get_orders
+
+    render json: orders, status: :ok
   end
 end

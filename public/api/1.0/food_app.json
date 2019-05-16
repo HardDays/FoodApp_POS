@@ -71,6 +71,13 @@
               "type": "boolean",
               "description": "syncronization required",
               "required": false
+            },
+            {
+              "paramType": "form",
+              "name": "clear_menu",
+              "type": "boolean",
+              "description": "clear menu before sync",
+              "required": false
             }
           ],
           "responseMessages": [
@@ -86,6 +93,110 @@
             }
           ],
           "nickname": "FoodApp#sign_in",
+          "method": "post"
+        }
+      ]
+    },
+    {
+      "path": "/get_restaurant.json",
+      "operations": [
+        {
+          "summary": "foodapp restaurant",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Ok"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Unauthorized"
+            }
+          ],
+          "nickname": "FoodApp#get_restaurant",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/get_orders.json",
+      "operations": [
+        {
+          "summary": "foodapp menu clear",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Ok"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Unauthorized"
+            }
+          ],
+          "nickname": "FoodApp#get_orders",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/create_test_order.json",
+      "operations": [
+        {
+          "summary": "Create test order in foodapp",
+          "parameters": [
+            {
+              "paramType": "form",
+              "name": "date",
+              "type": "string",
+              "description": null,
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "item_id",
+              "type": "string",
+              "description": null,
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Ok"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Unauthorized"
+            }
+          ],
+          "nickname": "FoodApp#create_test_order",
+          "method": "post"
+        }
+      ]
+    },
+    {
+      "path": "/clear_menu.json",
+      "operations": [
+        {
+          "summary": "foodapp menu clear",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Ok"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Unauthorized"
+            }
+          ],
+          "nickname": "FoodApp#clear_menu",
           "method": "post"
         }
       ]
