@@ -9,6 +9,8 @@ namespace :orders do
       unless order_status_info
         print("status info not fount fo order #{order.pos_order_number}")
       end
+
+      order_status_info = JSON.parse order_status_info
       print(order_status_info)
 
       if order_status_info
