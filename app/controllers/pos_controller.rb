@@ -95,7 +95,7 @@ class PosController < ApplicationController
     end
 
     begin
-      order = Order.find_by(foodapp_order_id: params[:order_id])
+      order = restaurant.orders.find_by(foodapp_order_id: params[:order_id])
     rescue
       render json: {errors: ORDER_NOT_FOUND}, status: :forbidden and return
     end
@@ -110,6 +110,8 @@ class PosController < ApplicationController
       foodapp_connection = FoodAppExchange.new(restaurant.user.email, nil)
       foodapp_order = foodapp_connection.update_order_status(
         order_status_info, restaurant.foodapp_id, order.foodapp_order_id)
+
+      order.status = order_status_info[:status]
 
       render json: foodapp_order, status: :ok and return
     end
