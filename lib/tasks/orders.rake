@@ -9,13 +9,16 @@ namespace :orders do
       unless order_status_info
         print("status info not fount fo order #{order.pos_order_number}")
       end
+      print(order_status_info)
 
       if order_status_info
         foodapp_connection = FoodAppExchange.new(order.restaurant.user.email, nil)
         foodapp_order = foodapp_connection.update_order_status(
           order_status_info, order.restaurant.foodapp_id, order.foodapp_order_id)
 
-        order.status = order_status_info[:status]
+        if foodapp_order
+          order.status = order_status_info[:status]
+        end
 
         print("#{order.pos_order_number} ok")
       end
