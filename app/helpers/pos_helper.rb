@@ -41,7 +41,7 @@ class PosHelper
         local_menu_item.name = menu_item["name"]
         local_menu_item.code = menu_item["code"]
         local_menu_item.description = menu_item["description"]
-        local_menu_item.price = menu_item["price"]
+        local_menu_item.price = menu_item["price"] * 100
         local_menu_item.cooking_time = menu_item["cooking_time"]
         local_menu_item.kcal = menu_item["kcal"]
         local_menu_item.currency = restaurant.currency
