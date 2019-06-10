@@ -93,7 +93,7 @@ class PosHelper
               {
                 foodapp_id: new_menu_category["id"],
                 name: new_menu_category["name"],
-                restaurant_id: new_menu_category["restaurant_id"]
+                restaurant_id: restaurant.id
               })
               local_menu_category.save!
           else
