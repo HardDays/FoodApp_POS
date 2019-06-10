@@ -19,6 +19,8 @@ namespace :orders do
           order_status_info, order.restaurant.foodapp_id, order.foodapp_order_id)
 
         print(foodapp_order)
+        print(order.restaurant.foodapp_id)
+        print(order.foodapp_order_id)
         if foodapp_order
           order.status = order_status_info[:status]
           order.save
