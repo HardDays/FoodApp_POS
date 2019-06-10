@@ -103,6 +103,7 @@ class FoodAppExchange
       menu_category = "{}"
     end
 
+    print(menu_category)
     JSON.parse menu_category
   end
 
