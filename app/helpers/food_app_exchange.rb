@@ -243,7 +243,7 @@ class FoodAppExchange
   def update_order_status(json, restaurant_id, order_id)
      order = self.class.put(
       "/restaurants/#{restaurant_id}/orders/#{order_id}",
-      body: json,
+      body: json.to_json,
       headers: {
         'Content-Type' => 'application/json',
         'Authorization' => @user["token"]

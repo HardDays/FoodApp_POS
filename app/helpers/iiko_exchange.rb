@@ -3,10 +3,10 @@ class IIKOExchange
   base_uri 'https://iiko.biz:9900/api/0'
 
   @@order_statuses = {
-    "Готовится": :in_progress,
-    "In progress": :in_progress,
-    "Не подтверждена": :in_progress,
-    "Not confirmed": :in_progress,
+    "Готовится": :in_process,
+    "In progress": :in_process,
+    "Не подтверждена": :in_process,
+    "Not confirmed": :in_process,
     "Ждет отправки": :ready,
     "Awaiting delivery": :ready,
     "В пути": :ready,
