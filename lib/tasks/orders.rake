@@ -18,8 +18,10 @@ namespace :orders do
         foodapp_order = foodapp_connection.update_order_status(
           order_status_info, order.restaurant.foodapp_id, order.foodapp_order_id)
 
+        print(foodapp_order)
         if foodapp_order
           order.status = order_status_info[:status]
+          order.save
         end
 
         print("#{order.pos_order_number} ok")

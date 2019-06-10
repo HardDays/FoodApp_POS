@@ -89,13 +89,12 @@ class PosHelper
             {name: Rails.configuration.default_category_name}.to_json, restaurant.foodapp_id)
 
           if new_menu_category
-            local_menu_category = MenuCategory.new(
+            local_menu_category = MenuCategory.create(
               {
                 foodapp_id: new_menu_category["id"],
                 name: new_menu_category["name"],
                 restaurant_id: restaurant.id
               })
-              local_menu_category.save!
           else
             next
           end
