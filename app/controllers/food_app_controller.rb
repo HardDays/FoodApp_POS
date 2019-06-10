@@ -70,6 +70,9 @@ class FoodAppController < ApplicationController
     @connection = FoodAppExchange.new("aaa@aaa.com", nil)
     @connection.clear_menu("1ff63949-2b03-4c15-917f-d74f0fc786b0")
 
+    MenuCategory.destroy_all
+    MenuItem.destroy_all
+
     render status: :ok
   end
 

@@ -99,33 +99,37 @@ class IIKOExchange
         })
     end
 
-    order = self.class.post(
-      "/orders/add?&access_token=#{@token}",
-      body: {
-        organization: restaurant_guid,
-        customer: {
-          name: customer_info["name"],
-          phone: customer_info["phone"]
-        },
-        order: {
-          date: DateTime.now,
-          phone: customer_info["phone"],
-          isSelfService: true,
-          items: items_data
-        },
-        address: {},
-        paymentItems: [
-          {
-            sum: 0,
-            paymentType: [payment_type],
-            isProcessedExternally: false
-          }
-        ]
-      }.to_json,
-      headers: {
-        'Content-Type' => 'application/json'
-      }
-    ).body
+    begin
+      order = self.class.post(
+        "/orders/add?&access_token=#{@token}",
+        body: {
+          organization: restaurant_guid,
+          customer: {
+            name: customer_info["name"],
+            phone: customer_info["phone"]
+          },
+          order: {
+            date: DateTime.now,
+            phone: customer_info["phone"],
+            isSelfService: true,
+            items: items_data
+          },
+          address: {},
+          paymentItems: [
+            {
+              sum: 0,
+              paymentType: [payment_type],
+              isProcessedExternally: false
+            }
+          ]
+        }.to_json,
+        headers: {
+          'Content-Type' => 'application/json'
+        }
+      ).body
+    rescue
+      return JSON.parse '{"error": "can\'t send order to POS system"}'
+    end
 
     if order == ""
       order = "{}"

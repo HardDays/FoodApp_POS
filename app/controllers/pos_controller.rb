@@ -29,10 +29,9 @@ class PosController < ApplicationController
   end
 
   def sync_menu
-    begin
-      restaurant = Restaurant.find_by(foodapp_id: params[:restaurant_id])
-    rescue
-      render json: {errors: RESTAURANT_NOT_FOUND}, status: :forbidden and return
+    restaurant = Restaurant.find_by(foodapp_id: params[:restaurant_id])
+    unless restaurant
+      render json: {errors: :RESTAURANT_NOT_FOUND}, status: :forbidden and return
     end
 
     PosHelper::sync_restaurant_menu(restaurant)
@@ -63,6 +62,10 @@ class PosController < ApplicationController
 
     unless order
       render json: {error: :ITEM_NOT_FOUNT}, status: :unprocessable_entity and return
+    end
+
+    if "error".in? order
+      render json: order, status: :unprocessable_entity and return
     end
 
     new_order = Order.new(

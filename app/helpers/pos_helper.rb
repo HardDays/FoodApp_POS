@@ -75,7 +75,7 @@ class PosHelper
         local_menu_category = MenuCategory.find_by(pos_id: local_menu_item.pos_menu_category_id)
 
         unless local_menu_category.foodapp_id
-          self.upload_menu_items(restaurant)
+          self.upload_menu_categories(restaurant)
           local_menu_category = MenuCategory.find_by(pos_id: local_menu_item.pos_menu_category_id)
         end
       else
