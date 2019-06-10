@@ -1,7 +1,7 @@
 namespace :orders do
   desc "TODO"
   task update_order_status: :environment do
-    orders = Order.where(status: [Order.statuses[:added], Order.statuses[:in_progress]])
+    orders = Order.where(status: [Order.statuses[:added], Order.statuses[:in_progress], nil])
 
     orders.each do |order|
       order_status_info = PosHelper::check_order(order.restaurant, order)
