@@ -13,7 +13,7 @@ namespace :orders do
       order_status_info = JSON.parse order_status_info
       print(order_status_info)
 
-      if order_status_info
+      if "order_status".in? order_status_info
         foodapp_connection = FoodAppExchange.new(order.restaurant.user.email, nil)
         foodapp_order = foodapp_connection.update_order_status(
           order_status_info, order.restaurant.foodapp_id, order.foodapp_order_id)
@@ -26,6 +26,10 @@ namespace :orders do
 
         print("#{order.pos_order_number} ok")
       end
+
+      print("\n")
+      print("\n")
+      print("\n")
     end
   end
 
